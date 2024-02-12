@@ -1,3 +1,6 @@
+//Gameboard object allows to initialize an array that keeps counts of what player played what
+//It also sets up listeners and prints the board on console/screen
+
 const gameboard = (function(){
     const board = [[],[]];
     const SIZE = 3;
@@ -38,6 +41,8 @@ const gameboard = (function(){
     return {initialize, updateBoard, printBoard, liveGame};
 })();
 
+//Player object saves the names of the players and the number of games won.
+
 function player(names, Number)
 {
     const name = names;
@@ -50,6 +55,10 @@ function player(names, Number)
 
     return {getName,getScore,getPlayerNumber,registerWin};
 }
+
+//The playGame object works closely with the gameboard object, initializing its event listeners and informing
+//where to update the board
+
 
 const playGame = (function (){
     gameboard.initialize();
