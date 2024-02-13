@@ -22,12 +22,13 @@ const gameboard = (function(){
         if(board[row][column] !== 0)
         {
             console.log("Invalid move");
-            return;
+            return -1;
         }
         if(player === 1)
             board[row][column] = 'O';
         else if(player === 2)
             board[row][column] = 'X';
+        return 1;
     }
     const printBoard = () => {
         for(let i = 0; i < SIZE; i++) {
@@ -79,34 +80,38 @@ const playGame = (function (){
     };
     const playTheGame = () => {
         const buttons = gameboard.liveGame();
+        let checkValid;
         for(let i = 0; i < 9; i++)
             {buttons[i].addEventListener('click',()=>{
                 
                 switch(i){
                     case 0:
-                        gameboard.updateBoard(0,0,whichTurn());
+                        checkValid = gameboard.updateBoard(0,0,whichTurn());
                         break;
-                    case 1: gameboard.updateBoard(0,1,whichTurn());
+                    case 1: checkValid =gameboard.updateBoard(0,1,whichTurn());
                     break;
                     case 2:
-                        gameboard.updateBoard(0,2,whichTurn());
+                        checkValid = gameboard.updateBoard(0,2,whichTurn());
                         break;
-                    case 3: gameboard.updateBoard(1,0,whichTurn());
+                    case 3: checkValid = gameboard.updateBoard(1,0,whichTurn());
                     break;
                     case 4:
-                        gameboard.updateBoard(1,1,whichTurn());
+                        checkValid = gameboard.updateBoard(1,1,whichTurn());
                         break;
-                    case 5: gameboard.updateBoard(1,2,whichTurn());
+                    case 5: checkValid = gameboard.updateBoard(1,2,whichTurn());
                     break;
                     case 6:
-                        gameboard.updateBoard(2,0,whichTurn());
+                        checkValid = gameboard.updateBoard(2,0,whichTurn());
                         break;
-                    case 7: gameboard.updateBoard(2,1,whichTurn());
+                    case 7: checkValid = gameboard.updateBoard(2,1,whichTurn());
                     break;
-                    case 8: gameboard.updateBoard(2,2,whichTurn());
+                    case 8: checkValid = gameboard.updateBoard(2,2,whichTurn());
                     break;
                 }
-                gameboard.printBoard();
+                if(checkValid === -1)
+                    turn--;
+                else
+                    gameboard.printBoard();
             })
         }
     }
