@@ -13,6 +13,19 @@ const gameboard = (function(){
                 board[i][j] = 0;
         }
     }
+    const getBoard = () => board;
+    const checkIfFull = () => {
+        let checker = true;
+        for(let i = 0; i < SIZE; i++)
+        {
+            for(let j = 0; j < SIZE; j++)
+            {
+                if(board[i][j] === 0)
+                    checker = false;
+            }
+        }
+        return checker;
+    }
     const liveGame = () => {
         for(let i = 0; i < 9; i++)
             listeners[i] = document.getElementById(i);
@@ -39,7 +52,7 @@ const gameboard = (function(){
         }
     }
 
-    return {initialize, updateBoard, printBoard, liveGame};
+    return {initialize, updateBoard, printBoard, liveGame, getBoard,checkIfFull};
 })();
 
 //Player object saves the names of the players and the number of games won.
@@ -78,6 +91,78 @@ const playGame = (function (){
             return 1;
         }
     };
+    //returns -1 when there's no winner, 0 if there's a tie, or 1||2 if player 1 or 2 won
+    const checkIfWinner = () => {
+        const auxBoard = gameboard.getBoard();
+        const checkRow = (rowOrColumn) =>{
+            let aux = rowOrColumn[0];
+            let checker = true;
+            if(aux === 0)
+            {
+                checker = false;
+                return checker;
+            }
+            for(let i = 1; i < 3; i++)
+            {
+                if(aux !== rowOrColumn[i])
+                    checker = false;
+            }
+            return checker;
+        }
+        const invertedBoard = [[],[]]
+        for(let i = 0; i < 3; i++)
+        {
+            invertedBoard[i] = [];
+            for(let j = 0; j < 3; j++)
+            {
+                invertedBoard[i][j] = auxBoard[j][i];
+            } 
+        }
+        const crossArrays = [[auxBoard[0][0],auxBoard[1][1],auxBoard[2][2]],
+        [auxBoard[0][2],auxBoard[1][1],auxBoard[2][0]]];
+
+        //below checks each row and column for a winner
+        //sorry for repeating code, i'm tired
+        let isThereWinner = false;
+        for(let i = 0; i < 3; i++)
+        {
+            isThereWinner = checkRow(auxBoard[i]);
+            if(isThereWinner)
+            {
+                if(auxBoard[i][0] === 'O')
+                    return 1;
+                else
+                    return 2;
+            }
+        }
+        for(let i = 0; i < 3; i++)
+        {
+            isThereWinner = checkRow(invertedBoard[i]);
+            if(isThereWinner)
+            {
+                if(invertedBoard[i][0] === 'O')
+                    return 1;
+                else
+                    return 2;
+            }
+        }
+        for(let i = 0; i < 2; i++)
+        {
+            isThereWinner = checkRow(crossArrays[i]);
+            if(isThereWinner)
+            {
+                if(crossArrays[i][0] === 'O')
+                    return 1;
+                else
+                    return 2;
+            }
+        }
+        if(!gameboard.checkIfFull())
+            return -1;
+        else
+            return 0;            
+    }
+
     const playTheGame = () => {
         const buttons = gameboard.liveGame();
         let checkValid;
@@ -115,10 +200,11 @@ const playGame = (function (){
             })
         }
     }
-    return {playerOne,playerTwo,whichTurn,playTheGame};
+    return {playerOne,playerTwo,whichTurn,playTheGame,checkIfWinner};
 })();
 
 
 playGame.playTheGame();
+
 
 //remember the parenthesis
