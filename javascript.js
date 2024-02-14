@@ -1,5 +1,5 @@
 //Gameboard object allows to initialize an array that keeps counts of what player played what
-//It also sets up listeners and prints the board on console/screen
+//It also gets the elements from the DOM and prints the board on console/screen
 
 const gameboard = (function(){
     const board = [[],[]];
@@ -31,6 +31,7 @@ const gameboard = (function(){
             listeners[i] = document.getElementById(i);
         return listeners;
     }
+ 
     const updateBoard = (row,column,player) =>{
         if(board[row][column] !== 0)
         {
@@ -163,42 +164,85 @@ const playGame = (function (){
             return 0;            
     }
 
+    const endGame = ()=> {
+        let winChecker, returnValue = -1;
+        winChecker = checkIfWinner();   
+        switch(winChecker){
+            case 0: console.log("there's a tie");
+                returnValue = 0;
+                break;
+            case 1: console.log('Player 1 won');
+               returnValue = 0;
+                break;
+            case 2: console.log("Player 2 won");
+               returnValue = 0;
+                break;
+        }
+        return returnValue;
+    }
+
     const playTheGame = () => {
         const buttons = gameboard.liveGame();
+        let finishGame = -1;
         let checkValid;
+        const eventListeners = [];
         for(let i = 0; i < 9; i++)
-            {buttons[i].addEventListener('click',()=>{
-                
+            { const listeners = ()=>{                
                 switch(i){
                     case 0:
                         checkValid = gameboard.updateBoard(0,0,whichTurn());
+                        finishGame = endGame();
                         break;
                     case 1: checkValid =gameboard.updateBoard(0,1,whichTurn());
+                    finishGame = endGame();
                     break;
                     case 2:
                         checkValid = gameboard.updateBoard(0,2,whichTurn());
+                        finishGame = endGame();
                         break;
                     case 3: checkValid = gameboard.updateBoard(1,0,whichTurn());
+                    finishGame = endGame();
                     break;
                     case 4:
                         checkValid = gameboard.updateBoard(1,1,whichTurn());
+                        finishGame = endGame();
                         break;
                     case 5: checkValid = gameboard.updateBoard(1,2,whichTurn());
+                    finishGame = endGame();
                     break;
                     case 6:
                         checkValid = gameboard.updateBoard(2,0,whichTurn());
+                        finishGame = endGame();
                         break;
                     case 7: checkValid = gameboard.updateBoard(2,1,whichTurn());
+                    finishGame = endGame();
                     break;
                     case 8: checkValid = gameboard.updateBoard(2,2,whichTurn());
+                    finishGame = endGame();
                     break;
+                }
+                if(finishGame !== -1)
+                {
+                    killGame();
+                    return;
                 }
                 if(checkValid === -1)
                     turn--;
                 else
                     gameboard.printBoard();
-            })
+            };
+            buttons[i].addEventListener('click',listeners);
+            eventListeners.push(listeners);
         }
+        const killGame = () => {
+            // Remove all event listeners
+            for (const button of buttons) {
+                for (const listener of eventListeners) {
+                    button.removeEventListener('click', listener);
+                }
+            }
+        };
+        
     }
     return {playerOne,playerTwo,whichTurn,playTheGame,checkIfWinner};
 })();
