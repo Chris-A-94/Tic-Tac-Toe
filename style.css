@@ -16,3 +16,25 @@ body{
     grid-template-rows: repeat(3,3cm);
     justify-content: center;
 }
+
+#b0,#b1,#b2{
+    border-top:none;  
+    
+}
+
+#b6,#b7,#b8{
+    border-bottom: none;
+}
+#b8,#b2,#b5{
+    border-right:none;
+}
+#b3,#b0,#b6{
+    border-left:none;    
+}
+
+button{
+    border:solid black;
+    color:white;
+    font-weight: bolder;
+    font-size: larger;
+}

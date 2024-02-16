@@ -28,7 +28,7 @@ const gameboard = (function(){
     }
     const liveGame = () => {
         for(let i = 0; i < 9; i++)
-            listeners[i] = document.getElementById(i);
+            listeners[i] = document.getElementById('b'+i);
         return listeners;
     }
  
@@ -44,13 +44,23 @@ const gameboard = (function(){
             board[row][column] = 'X';
         return 1;
     }
-    const printBoard = () => {
+    const printBoard = (position,player) => {
         for(let i = 0; i < SIZE; i++) {
             let row = "";
             for(let j = 0; j < SIZE; j++)
                 row += board[i][j] + " ";
             console.log(row);
         }
+        if(player === 2)
+        {
+            listeners[position].style.backgroundColor = 'blue';
+            listeners[position].textContent = 'O';
+        }
+        else if(player === 1)
+        {
+            listeners[position].style.backgroundColor = 'red';
+            listeners[position].textContent = 'X';
+        }        
     }
 
     return {initialize, updateBoard, printBoard, liveGame, getBoard,checkIfFull};
@@ -223,13 +233,18 @@ const playGame = (function (){
                 }
                 if(finishGame !== -1)
                 {
+                    gameboard.printBoard(i,whichTurn());
                     killGame();
                     return;
                 }
                 if(checkValid === -1)
                     turn--;
                 else
-                    gameboard.printBoard();
+                {
+                    gameboard.printBoard(i,whichTurn());
+                    turn--;
+                }
+                    
             };
             buttons[i].addEventListener('click',listeners);
             eventListeners.push(listeners);
