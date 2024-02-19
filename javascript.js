@@ -62,21 +62,51 @@ const gameboard = (function(){
             listeners[position].textContent = 'X';
         }        
     }
+    const cleanBoard = () => {
+        for(let i = 0; i < 9; i++)
+        {
+            
+            listeners[i].style.backgroundColor = 'white';
+            listeners[i].textContent = '';
+        }
+            
+    }
 
-    return {initialize, updateBoard, printBoard, liveGame, getBoard,checkIfFull};
+    return {initialize, updateBoard, printBoard, liveGame, getBoard,checkIfFull,cleanBoard};
 })();
 
 //Player object saves the names of the players and the number of games won.
 
 function player(names, Number)
 {
-    const name = names;
+    let name = names;
     let score = 0;
     const playerNumber = Number;
+    let nameDOM;
+    let changeName;
+    if(Number === 1)
+    {
+        nameDOM = document.getElementById('newNameOne');
+        changeName = document.getElementById('nameOne');
+    }
+        
+    else
+    {
+        nameDOM = document.getElementById('newNameTwo');
+        changeName = document.getElementById('nameTwo');
+    }
+            
+    nameDOM.textContent = name;
+    changeName.addEventListener('click',()=>{
+        name = prompt('New Name:');
+        nameDOM.textContent = name;
+    })
+    
     const getName = ()=> name;
     const getScore = ()=> score;
     const getPlayerNumber = ()=> playerNumber;
     const registerWin = () => score++;
+    
 
     return {getName,getScore,getPlayerNumber,registerWin};
 }
@@ -86,10 +116,15 @@ function player(names, Number)
 
 
 const playGame = (function (){
-    gameboard.initialize();
-    const playerOne = player('one',1);
-    const playerTwo = player('two',2);
+    
+    const playerOne = player('Jugador Uno',1);
+    const playerTwo = player('Jugador Dos',2);
     let turn = 1;
+    const startGame = () => {
+        gameboard.initialize();        
+        playTheGame();
+        gameboard.cleanBoard();
+    }
     const whichTurn = () => {
         if(turn % 2 === 0)
         {
@@ -259,11 +294,14 @@ const playGame = (function (){
         };
         
     }
-    return {playerOne,playerTwo,whichTurn,playTheGame,checkIfWinner};
+    return {playerOne,playerTwo,whichTurn,playTheGame,checkIfWinner,startGame};
 })();
 
 
-playGame.playTheGame();
+const playAnotherGame = document.getElementById('starting');
+starting.addEventListener('click',()=>{
+    playGame.startGame()});
 
 
-//remember the parenthesis
+
+

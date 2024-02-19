@@ -30,6 +30,11 @@ body{
     background-color: red;
 }
 
+#newNameOne,#newNameTwo{
+    font-weight: bold;
+    color: orange;
+}
+
 #board{
     flex:0.75;
     align-self: center;
