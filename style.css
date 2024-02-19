@@ -1,11 +1,33 @@
 html,body{
-    height: 100%;
-    width: 100%;
+    height: 95%;
+    width: 98%;
 }
 
 body{
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    padding:0.25cm;
+}
+
+#upperBar{
+    flex:0.25;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nameChange{
+    border: none;
+    color: white;
+    font-weight: normal;
+    font-size: 0.6em;
+    max-width: 2.5cm;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: orange;
+}
+.nameChange:focus{
+    background-color: red;
 }
 
 #board{
@@ -18,8 +40,7 @@ body{
 }
 
 #b0,#b1,#b2{
-    border-top:none;  
-    
+    border-top:none;     
 }
 
 #b6,#b7,#b8{
@@ -37,4 +58,13 @@ button{
     color:white;
     font-weight: bolder;
     font-size: larger;
+}
+
+#startGame{
+    display: flex;
+    justify-content: center;
+}
+#starting{
+    color:black;
+    font-weight: 500;
 }
