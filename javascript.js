@@ -5,6 +5,7 @@ const gameboard = (function(){
     const board = [[],[]];
     const SIZE = 3;
     const listeners = [];
+    const announce = document.getElementById('winner');
     const initialize = () => {
         for(let i = 0; i < SIZE; i++)
         {
@@ -71,8 +72,16 @@ const gameboard = (function(){
         }
             
     }
+    const updateWinner = (name) => {
+        if(name === '1start')
+        {
+            announce.textContent = '';
+            return;
+        }
+        announce.textContent = name+" wins!";
+    }
 
-    return {initialize, updateBoard, printBoard, liveGame, getBoard,checkIfFull,cleanBoard};
+    return {initialize, updateBoard, printBoard, liveGame, getBoard,checkIfFull,cleanBoard,updateWinner};
 })();
 
 //Player object saves the names of the players and the number of games won.
@@ -84,18 +93,21 @@ function player(names, Number)
     const playerNumber = Number;
     let nameDOM;
     let changeName;
+    let visibleScore;
     if(Number === 1)
     {
         nameDOM = document.getElementById('newNameOne');
         changeName = document.getElementById('nameOne');
+        visibleScore = document.getElementById('scoreOne')
     }
         
     else
     {
         nameDOM = document.getElementById('newNameTwo');
         changeName = document.getElementById('nameTwo');
+        visibleScore = document.getElementById('scoreTwo')
     }
-            
+    visibleScore.textContent = score;
     nameDOM.textContent = name;
     changeName.addEventListener('click',()=>{
         name = prompt('New Name:');
@@ -105,7 +117,10 @@ function player(names, Number)
     const getName = ()=> name;
     const getScore = ()=> score;
     const getPlayerNumber = ()=> playerNumber;
-    const registerWin = () => score++;
+    const registerWin = () => {
+        score++;
+        visibleScore.textContent = score;
+    };
     
 
     return {getName,getScore,getPlayerNumber,registerWin};
@@ -121,7 +136,8 @@ const playGame = (function (){
     const playerTwo = player('Jugador Dos',2);
     let turn = 1;
     const startGame = () => {
-        gameboard.initialize();        
+        gameboard.initialize(); 
+        gameboard.updateWinner('1start')       
         playTheGame();
         gameboard.cleanBoard();
     }
@@ -217,9 +233,13 @@ const playGame = (function (){
                 returnValue = 0;
                 break;
             case 1: console.log('Player 1 won');
+               playerOne.registerWin();
+               gameboard.updateWinner(playerOne.getName());
                returnValue = 0;
                 break;
             case 2: console.log("Player 2 won");
+               playerTwo.registerWin();
+               gameboard.updateWinner(playerTwo.getName());
                returnValue = 0;
                 break;
         }

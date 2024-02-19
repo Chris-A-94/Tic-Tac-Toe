@@ -73,3 +73,10 @@ button{
     color:black;
     font-weight: 500;
 }
+
+#winner{
+    font-size: larger;
+    font-weight: 800;
+    color:green;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
